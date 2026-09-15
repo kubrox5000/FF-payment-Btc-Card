@@ -18,7 +18,7 @@ import jsonMetadata from '../metadata.json';
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
-  display: 'swap',    // يعرض النص فوراً بخط النظام ثم يبدّل — يمنع FOIT
+  display: 'swap',
   preload: true,
 });
 
@@ -26,29 +26,29 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
   display: 'swap',
-  preload: false,     // Mono غير ضروري في اللود الأول
+  preload: false,
 });
 
 export const metadata: Metadata = {
   ...jsonMetadata,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://diamondboost.gg'),
-  applicationName: 'FF Diamond',
+  applicationName: 'FF-Diamond',
   viewport: {
     width: 'device-width',
     initialScale: 1,
     viewportFit: 'cover',
   },
   openGraph: {
-    title: jsonMetadata.title,
-    description: jsonMetadata.description,
+    title: 'FF-Diamond X1 — Premium Electric Scooter',
+    description: 'FF-Diamond X1 Electric Scooter. Power Meets Freedom.',
     type: 'website',
-    siteName: 'FF Diamond',
+    siteName: 'FF-Diamond',
     images: ['/icon.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: jsonMetadata.title,
-    description: jsonMetadata.description,
+    title: 'FF-Diamond X1 — Premium Electric Scooter',
+    description: 'FF-Diamond X1 Electric Scooter. Power Meets Freedom.',
     images: ['/icon.png'],
   },
 };
@@ -66,16 +66,12 @@ export default async function RootLayout({
   return (
     <html lang={initialLocale.lang} dir={dirOf(initialLocale.lang)} className="dark" suppressHydrationWarning>
       <head>
-        {/* ── Performance hints ────────────────────────────────────────────── */}
-        {/* DNS prefetch + preconnect للخطوط وأي CDN خارجي */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        {/* اتصال مسبق لشبكات التتبع — يُحمِّل سكربتاتها أسرع دون إبطاء الصفحة */}
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://googletagmanager.com" />
         <link rel="dns-prefetch" href="https://analytics.tiktok.com" />
         <link rel="dns-prefetch" href="https://sc-static.net" />
-        {/* Inject brand data before any JS runs — eliminates the /api/site-brand fetch */}
         <script dangerouslySetInnerHTML={{ __html: brandScript }} />
         {process.env.NODE_ENV === 'production' && (
           <Script
@@ -88,7 +84,6 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* شريط التقدم عند الانتقال بين الصفحات */}
         <PageProgress />
         <GeoLocaleProvider initialLocale={initialLocale}>{children}</GeoLocaleProvider>
         <Toaster position="top-center" richColors closeButton />
