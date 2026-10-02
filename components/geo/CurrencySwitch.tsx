@@ -14,6 +14,7 @@ interface CurrencyOption {
 
 const CURRENCIES: CurrencyOption[] = [
   { code: 'USD', symbol: '$',    flag: '🇺🇸', label: 'US Dollar' },
+  { code: 'CAD', symbol: 'CA$',  flag: '🇨🇦', label: 'Canadian Dollar' },
   { code: 'EUR', symbol: '€',    flag: '🇪🇺', label: 'Euro' },
   { code: 'GBP', symbol: '£',    flag: '🇬🇧', label: 'Pound' },
   { code: 'SAR', symbol: 'ر.س', flag: '🇸🇦', label: 'Saudi Riyal' },

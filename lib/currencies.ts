@@ -47,6 +47,7 @@ export const CURRENCIES: Record<string, CurrencyInfo> = {
   NGN: { code: 'NGN', name: 'Nigerian Naira', symbol: '₦', rate: 1500 },
   THB: { code: 'THB', name: 'Thai Baht', symbol: '฿', rate: 34 },
   MYR: { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM', rate: 4.3 },
+  CAD: { code: 'CAD', name: 'Canadian Dollar', symbol: 'CA$', rate: 1.38 },
   // Latin America
   MXN: { code: 'MXN', name: 'Mexican Peso', symbol: 'MX$', rate: 18.5 },
   GTQ: { code: 'GTQ', name: 'Guatemalan Quetzal', symbol: 'Q', rate: 7.7 },
@@ -121,6 +122,7 @@ const COUNTRY_LOCALE: Record<string, LocaleConfig> = {
   PR: { lang: 'es', currency: 'USD' },
   // Non-Arabic regions with local currency
   US: { lang: 'en', currency: 'USD' },
+  CA: { lang: 'en', currency: 'CAD' },
   GB: { lang: 'en', currency: 'GBP' },
   IN: { lang: 'en', currency: 'INR' },
   PK: { lang: 'en', currency: 'PKR' },
@@ -173,6 +175,15 @@ const TIMEZONE_COUNTRY: Record<string, string> = {
   'Asia/Bahrain': 'BH',
   'Asia/Jerusalem': 'PS',
   'Asia/Aden': 'YE',
+  // Canada
+  'America/Toronto': 'CA',
+  'America/Vancouver': 'CA',
+  'America/Montreal': 'CA',
+  'America/Edmonton': 'CA',
+  'America/Winnipeg': 'CA',
+  'America/Halifax': 'CA',
+  'America/Regina': 'CA',
+  'America/St_Johns': 'CA',
   // Latin America
   'America/Mexico_City': 'MX',
   'America/Cancun': 'MX',
