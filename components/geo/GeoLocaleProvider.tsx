@@ -140,6 +140,8 @@ export function GeoLocaleProvider({
       // ignore storage errors
     }
     setState((s) => ({ ...s, lang }))
+    // إعادة تحميل الصفحة لتطبيق اللغة الجديدة على كامل الموقع
+    if (typeof window !== 'undefined') window.location.reload()
   }, [])
 
   const setCurrency = useCallback((currency: string) => {
