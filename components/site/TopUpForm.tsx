@@ -320,7 +320,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   </span>
                   <div className="flex-1">
                     <p className="font-semibold">Visa / Mastercard</p>
-                    <p className="text-xs text-muted-foreground">اختر هذه الطريقة ثم اضغط "متابعة إلى الدفع"</p>
+                    <p className="text-xs text-muted-foreground">{t('pay_card_hint')}</p>
                   </div>
                   {method === 'BANK_CARD' && <CheckCircle2 className="h-5 w-5 text-primary" />}
                 </button>
@@ -439,7 +439,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                       )}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-muted-foreground">طريقة الدفع</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t('bpr_method')}</p>
                       {method ? (
                         <p className="truncate font-semibold">
                           {method === 'BANK_CARD' ? 'Visa / Mastercard' : (pm?.label ?? method)}
@@ -503,7 +503,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 <ArrowRight className="h-4 w-4" />
-                تغيير طريقة الدفع
+                {t('change_pay')}
               </button>
 
               {method === 'BANK_CARD' ? (
@@ -513,7 +513,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-primary to-orange-500 px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
                 >
                   <ArrowRight className="h-4 w-4" />
-                  متابعة إلى الدفع
+                  {t('proceed')}
                 </button>
               ) : (
                 <button
