@@ -19,7 +19,7 @@ export async function resolveServerLocale(): Promise<ServerLocale> {
   // 1. Manual language override (persisted from the language switcher).
   const override = c.get(OVERRIDE_COOKIE)?.value
   const storedLang: Lang | undefined =
-    override === 'en' || override === 'ar' || override === 'fr' || override === 'es'
+    override === 'en' || override === 'ar' || override === 'fr' || override === 'es' || override === 'pt'
       ? (override as Lang)
       : undefined
 

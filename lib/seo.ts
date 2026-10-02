@@ -39,6 +39,7 @@ const ogLocale: Record<Lang, string> = {
   ar: 'ar_SA',
   fr: 'fr_FR',
   es: 'es_ES',
+  pt: 'pt_BR',
 }
 
 /**

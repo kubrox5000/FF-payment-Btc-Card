@@ -8,6 +8,6 @@ export async function GET() {
     .select()
     .from(packages)
     .where(eq(packages.active, true))
-    .orderBy(asc(packages.sortOrder))
+    .orderBy(asc(packages.diamonds), asc(packages.id))
   return NextResponse.json({ packages: rows })
 }

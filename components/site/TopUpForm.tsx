@@ -13,6 +13,8 @@ import { orderedCountries, DIAL_CODES, DIAL_OPTIONS, countryByCode } from '@/lib
 import { formatNumber } from '@/lib/currencies'
 import { useLocale } from '@/components/geo/GeoLocaleProvider'
 import { CryptoIcon } from '@/components/site/CryptoIcon'
+import { coinForMethod, cryptoAmount } from '@/lib/crypto-rates'
+import { useCryptoRates } from '@/lib/use-crypto-rates'
 import { cn } from '@/utils/cn'
 import type { PublicPackage, PublicPaymentMethod } from '@/lib/types'
 
@@ -109,6 +111,11 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
     }
     return { usd, usdt }
   }, [selected, couponPct])
+
+  // Total in the coin the customer picked (e.g. BTC), using live prices.
+  const coin = coinForMethod(method)
+  const rates = useCryptoRates(!!coin && !coin.stable)
+  const coinTotal = cryptoAmount(price.usdt, method, rates)
 
   async function applyCoupon() {
     if (!coupon.trim()) return
@@ -320,7 +327,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   </span>
                   <div className="flex-1">
                     <p className="font-semibold">Visa / Mastercard</p>
-                    <p className="text-xs text-muted-foreground">اختر هذه الطريقة ثم اضغط "متابعة إلى الدفع"</p>
+                    <p className="text-xs text-muted-foreground">{t('card_method_hint')}</p>
                   </div>
                   {method === 'BANK_CARD' && <CheckCircle2 className="h-5 w-5 text-primary" />}
                 </button>
@@ -439,7 +446,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                       )}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-muted-foreground">طريقة الدفع</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t('pay_method_label')}</p>
                       {method ? (
                         <p className="truncate font-semibold">
                           {method === 'BANK_CARD' ? 'Visa / Mastercard' : (pm?.label ?? method)}
@@ -485,7 +492,15 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   <span className="font-semibold">{t('total')}</span>
                   <div className="text-right">
                     <p className="text-xl font-extrabold text-gold" translate="no">{formatPrice(price.usd)}</p>
-                    <p className="text-xs text-muted-foreground" translate="no">{price.usdt.toFixed(2)} USDT</p>
+                    {coin && coin.symbol !== 'USDT' && (
+                      <p className="flex items-center justify-end gap-1.5 text-sm font-bold text-foreground" translate="no">
+                        <CryptoIcon id={method} className="h-4 w-4" />
+                        {coinTotal ? `${coinTotal.amount} ${coinTotal.symbol}` : <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                      </p>
+                    )}
+                    {(!coin || coin.symbol === 'USDT') && (
+                      <p className="text-xs text-muted-foreground" translate="no">{price.usdt.toFixed(2)} USDT</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -503,7 +518,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 <ArrowRight className="h-4 w-4" />
-                تغيير طريقة الدفع
+                {t('change_pay')}
               </button>
 
               {method === 'BANK_CARD' ? (
@@ -513,7 +528,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-primary to-orange-500 px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
                 >
                   <ArrowRight className="h-4 w-4" />
-                  متابعة إلى الدفع
+                  {t('continue_pay')}
                 </button>
               ) : (
                 <button

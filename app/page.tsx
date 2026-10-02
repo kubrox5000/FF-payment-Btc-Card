@@ -29,8 +29,8 @@ export default async function HomePage() {
     try {
       const getCachedPackages = unstable_cache(
         async () =>
-          db.select().from(packages).where(eq(packages.active, true)).orderBy(asc(packages.sortOrder)),
-        ['home-packages'],
+          db.select().from(packages).where(eq(packages.active, true)).orderBy(asc(packages.diamonds), asc(packages.id)),
+        ['home-packages-by-diamonds'],
         { revalidate: 300, tags: ['home'] },
       )
       const getCachedReviews = unstable_cache(

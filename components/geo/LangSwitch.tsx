@@ -11,6 +11,7 @@ const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'en', label: 'English',  flag: '🇺🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'es', label: 'Español',  flag: '🇪🇸' },
+  { code: 'pt', label: 'Português (BR)', flag: '🇧🇷' },
 ]
 
 export function LangSwitch({ className }: { className?: string }) {

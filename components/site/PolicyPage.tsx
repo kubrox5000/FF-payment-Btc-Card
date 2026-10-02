@@ -74,6 +74,20 @@ const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
         { h: 'Contacto', b: 'Para cualquier pregunta, contáctanos via Telegram o nuestro email de soporte.' },
       ],
     },
+    pt: {
+      title: 'Política de privacidade',
+      updated: 'Última atualização: 1º de janeiro de 2026',
+      intro: 'Respeitamos sua privacidade e nos comprometemos a proteger seus dados pessoais.',
+      sections: [
+        { h: 'Informações coletadas', b: 'Coletamos apenas os dados necessários para o seu pedido: ID de jogador, número do pedido e informações de pagamento.' },
+        { h: 'Uso dos dados', b: 'Usamos seus dados para processar pedidos, entregar diamantes e oferecer suporte.' },
+        { h: 'Compartilhamento de dados', b: 'Nunca vendemos seus dados. Eles são compartilhados apenas com as partes necessárias para o processamento.' },
+        { h: 'Segurança', b: 'Usamos criptografia padrão do mercado para proteger seus dados em trânsito e armazenados.' },
+        { h: 'Seus direitos', b: 'Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento.' },
+        { h: 'Cookies', b: 'Podemos usar cookies para melhorar a navegação e lembrar suas preferências de idioma e moeda.' },
+        { h: 'Contato', b: 'Em caso de dúvidas, fale conosco pelo Telegram ou pelo nosso e-mail de suporte.' },
+      ],
+    },
   },
   terms: {
     ar: {
@@ -132,6 +146,20 @@ const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
         { h: 'Aviso legal', b: 'Proporcionamos el servicio "tal cual" y siempre buscamos la calidad.' },
       ],
     },
+    pt: {
+      title: 'Termos de uso',
+      updated: 'Última atualização: 1º de janeiro de 2026',
+      intro: 'Ao usar nossa loja, você concorda com estes termos.',
+      sections: [
+        { h: 'Aceitação', b: 'Ao usar o site, você confirma que leu e aceitou estes termos.' },
+        { h: 'Elegibilidade', b: 'Você precisa ter pelo menos 13 anos para usar a loja.' },
+        { h: 'Pedidos corretos', b: 'Você é responsável por informar o ID de jogador correto.' },
+        { h: 'Uso aceitável', b: 'É proibido qualquer uso ilegal ou não autorizado do site.' },
+        { h: 'Propriedade intelectual', b: 'Todo o conteúdo do site nos pertence e não pode ser usado sem permissão.' },
+        { h: 'Alterações', b: 'Podemos atualizar preços, pacotes ou termos a qualquer momento.' },
+        { h: 'Aviso legal', b: 'Oferecemos o serviço "no estado em que se encontra" e sempre buscamos a qualidade.' },
+      ],
+    },
   },
   refund: {
     ar: {
@@ -186,6 +214,19 @@ const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
         { h: 'Cómo solicitar reembolso', b: 'Contáctanos en Telegram dentro de 7 días con tu número de pedido.' },
       ],
     },
+    pt: {
+      title: 'Política de reembolso',
+      updated: 'Última atualização: 1º de janeiro de 2026',
+      intro: 'Buscamos a sua total satisfação. Veja como funcionam os reembolsos.',
+      sections: [
+        { h: 'Falha na entrega', b: 'Se os diamantes não chegarem no prazo prometido, você tem direito a reembolso integral.' },
+        { h: 'ID incorreto', b: 'Se você informou o ID de jogador errado, avise-nos imediatamente.' },
+        { h: 'Erros do usuário', b: 'Não nos responsabilizamos por erros causados por informações incorretas.' },
+        { h: 'Não reembolsável', b: 'Depois que os diamantes são entregues com sucesso, os pedidos não são reembolsáveis.' },
+        { h: 'Solicitações recusadas', b: 'Reservamo-nos o direito de recusar solicitações que violem nossos termos.' },
+        { h: 'Como pedir reembolso', b: 'Fale conosco pelo Telegram em até 7 dias, informando o número do seu pedido.' },
+      ],
+    },
   },
   delivery: {
     ar: {
@@ -238,6 +279,19 @@ const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
         { h: 'Diamantes bonus', b: 'Algunos paquetes incluyen diamantes bonus que se agregan automáticamente.' },
         { h: 'Retrasos', b: 'En casos raros puede haber retrasos. Contacta al soporte.' },
         { h: 'Seguimiento', b: 'Usa la página de rastreo con tu número de pedido para ver el estado.' },
+      ],
+    },
+    pt: {
+      title: 'Política de entrega',
+      updated: 'Última atualização: 1º de janeiro de 2026',
+      intro: 'Oferecemos entrega rápida e automatizada para o seu ID no jogo.',
+      sections: [
+        { h: 'Prazo de entrega', b: 'A maioria dos pedidos é entregue em 2 a 30 minutos.' },
+        { h: 'Forma de entrega', b: 'Os diamantes são enviados na hora para o ID de jogador informado.' },
+        { h: 'Requisitos da conta', b: 'Verifique se o seu ID de jogador está correto e se a sua conta pode receber envios.' },
+        { h: 'Diamantes bônus', b: 'Alguns pacotes incluem diamantes bônus, adicionados automaticamente.' },
+        { h: 'Atrasos', b: 'Em casos raros, pode haver atrasos. Fale com o suporte.' },
+        { h: 'Acompanhamento', b: 'Use a página de rastreamento com o número do seu pedido para ver o status.' },
       ],
     },
   },

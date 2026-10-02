@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Copy, Check, Clock, Upload, Loader2, ShieldCheck, ArrowRight, AlertTriangle, Wifi, Banknote, Send } from 'lucide-react'
 import { PAYMENT_METHODS } from '@/lib/orders'
+import { QRCodeSVG } from 'qrcode.react'
 import { CryptoIcon } from '@/components/site/CryptoIcon'
+import { coinForMethod, cryptoAmount } from '@/lib/crypto-rates'
+import { useCryptoRates } from '@/lib/use-crypto-rates'
 import { useLocale } from '@/components/geo/GeoLocaleProvider'
 import type { PublicOrder } from '@/lib/types'
 
@@ -35,6 +38,15 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
 
   const method = methods.find((m) => m.id === order.paymentMethod)
   const isWallet = method?.cat === 'wallet'
+
+  // Exact amount to send in the selected coin (falls back to USDT).
+  const coin = coinForMethod(order.paymentMethod)
+  const rates = useCryptoRates(!!coin && !coin.stable)
+  const usdtAmount = parseFloat(order.amountUsdt).toFixed(2)
+  const coinTotal = cryptoAmount(parseFloat(order.amountUsdt), order.paymentMethod, rates)
+  const exactAmount = coinTotal?.amount ?? usdtAmount
+  const exactSymbol = coinTotal?.symbol ?? 'USDT'
+  const waitingRate = !!coin && !coin.stable && !coinTotal
   const [remaining, setRemaining] = useState(0)
   useEffect(() => {
     const deadline = new Date(order.createdAt).getTime() + 30 * 60 * 1000
@@ -100,7 +112,7 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
       const res = await fetch(`/api/orders/${order.orderNumber}/proof`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ txId, proofUrl: proof }),
+        body: JSON.stringify({ txId, proofUrl: proof, cryptoAmount: coinTotal ? `${coinTotal.amount} ${coinTotal.symbol}` : null }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || t('err_failed'))
@@ -138,7 +150,7 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
           </div>
 
           <div className="mt-6 grid gap-6 sm:grid-cols-[auto_1fr] sm:items-start">
-            {/* Payment instructions card — replaces QR code */}
+            {/* Payment instructions card */}
             <div className="mx-auto w-[168px] shrink-0 rounded-2xl border border-border bg-secondary/40 p-4">
               <div className="mb-3 flex items-center gap-2">
                 <CryptoIcon id={order.paymentMethod} className="h-8 w-8" />
@@ -161,6 +173,14 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
 
             <div className="space-y-4">
               <Info label={t('pay_send', { method: method?.label ?? 'USDT' })}>
+                {qrValue && !isWallet && (
+                  <div className="mb-3 flex flex-col items-center gap-2">
+                    <div className="rounded-xl bg-white p-3 shadow">
+                      <QRCodeSVG value={qrValue} size={168} level="M" marginSize={0} aria-label={qrValue} />
+                    </div>
+                    <p className="text-xs text-muted-foreground">{t('pay_scan_qr')}</p>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <code className="flex-1 break-all rounded-lg border px-3 py-2 text-xs" translate="no">
                     {order.walletAddress || t('pay_notconfig')}
@@ -180,10 +200,11 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
                 <div className="flex items-center gap-2">
                   <CryptoIcon id={order.paymentMethod} className="h-8 w-8" />
                   <code className="flex-1 text-base font-bold text-gold" translate="no">
-                    {parseFloat(order.amountUsdt).toFixed(2)} USDT
+                    {waitingRate ? <Loader2 className="inline h-4 w-4 animate-spin" /> : `${exactAmount} ${exactSymbol}`}
                   </code>
                   <button
-                    onClick={() => copy(parseFloat(order.amountUsdt).toFixed(2), 'amt')}
+                    onClick={() => copy(exactAmount, 'amt')}
+                    disabled={waitingRate}
                     className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-border hover:bg-secondary"
                     aria-label={t('pay_track')}
                   >
