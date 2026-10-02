@@ -1,6 +1,6 @@
 // Client-safe country/locale/currency resolution.
 
-export type Lang = 'en' | 'ar' | 'fr' | 'es'
+export type Lang = 'en' | 'ar' | 'fr' | 'es' | 'pt'
 export type Dir = 'ltr' | 'rtl'
 
 export interface CurrencyInfo {
@@ -128,7 +128,7 @@ const COUNTRY_LOCALE: Record<string, LocaleConfig> = {
   PK: { lang: 'en', currency: 'PKR' },
   ID: { lang: 'en', currency: 'IDR' },
   PH: { lang: 'en', currency: 'PHP' },
-  BR: { lang: 'en', currency: 'BRL' },
+  BR: { lang: 'pt', currency: 'BRL' },
   TR: { lang: 'en', currency: 'TRY' },
   NG: { lang: 'en', currency: 'NGN' },
   TH: { lang: 'en', currency: 'THB' },
@@ -139,7 +139,7 @@ const COUNTRY_LOCALE: Record<string, LocaleConfig> = {
   IT: { lang: 'en', currency: 'EUR' },
   NL: { lang: 'en', currency: 'EUR' },
   BE: { lang: 'en', currency: 'EUR' },
-  PT: { lang: 'en', currency: 'EUR' },
+  PT: { lang: 'pt', currency: 'EUR' },
   AT: { lang: 'en', currency: 'EUR' },
   IE: { lang: 'en', currency: 'EUR' },
   FI: { lang: 'en', currency: 'EUR' },

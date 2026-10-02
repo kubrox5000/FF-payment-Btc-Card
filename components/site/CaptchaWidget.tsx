@@ -19,7 +19,7 @@ export function CaptchaWidget({ onVerify, onExpire }: CaptchaWidgetProps) {
         onSuccess={onVerify}
         onExpire={onExpire}
         options={{
-          language: lang === 'ar' ? 'ar' : lang === 'fr' ? 'fr' : lang === 'es' ? 'es' : 'en',
+          language: lang === 'ar' ? 'ar' : lang === 'fr' ? 'fr' : lang === 'es' ? 'es' : lang === 'pt' ? 'pt-BR' : 'en',
           theme: 'dark',
           size: 'normal',
         }}

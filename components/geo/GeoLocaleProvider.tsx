@@ -99,7 +99,7 @@ export function GeoLocaleProvider({
     let override: Lang | undefined
     try {
       const stored = globalThis.localStorage?.getItem(OVERRIDE_KEY)
-      override = (stored === 'en' || stored === 'ar' || stored === 'fr' || stored === 'es') ? stored as Lang : undefined
+      override = (stored === 'en' || stored === 'ar' || stored === 'fr' || stored === 'es' || stored === 'pt') ? stored as Lang : undefined
     } catch {
       override = undefined
     }

@@ -2,10 +2,11 @@ import { en, type EnDict } from './locales/en'
 import { ar } from './locales/ar'
 import { fr } from './locales/fr'
 import { es } from './locales/es'
+import { pt } from './locales/pt'
 import type { Lang } from './currencies'
 
 // All language dictionaries share the same key shape as `en`.
-const dict: Record<Lang, EnDict> = { en, ar, fr: fr as unknown as EnDict, es: es as unknown as EnDict }
+const dict: Record<Lang, EnDict> = { en, ar, fr: fr as unknown as EnDict, es: es as unknown as EnDict, pt: pt as unknown as EnDict }
 
 export type TKey = keyof EnDict
 
