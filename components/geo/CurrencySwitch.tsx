@@ -22,6 +22,25 @@ const CURRENCIES: CurrencyOption[] = [
   { code: 'QAR', symbol: 'ر.ق', flag: '🇶🇦', label: 'Qatari Riyal' },
   { code: 'BHD', symbol: 'د.ب', flag: '🇧🇭', label: 'Bahrain Dinar' },
   { code: 'OMR', symbol: 'ر.ع', flag: '🇴🇲', label: 'Omani Rial' },
+  // Latin America
+  { code: 'MXN', symbol: 'MX$',  flag: '🇲🇽', label: 'Mexican Peso' },
+  { code: 'GTQ', symbol: 'Q',    flag: '🇬🇹', label: 'Guatemalan Quetzal' },
+  { code: 'HNL', symbol: 'L',    flag: '🇭🇳', label: 'Honduran Lempira' },
+  { code: 'NIO', symbol: 'C$',   flag: '🇳🇮', label: 'Nicaraguan Córdoba' },
+  { code: 'CRC', symbol: '₡',    flag: '🇨🇷', label: 'Costa Rican Colón' },
+  { code: 'PAB', symbol: 'B/.',  flag: '🇵🇦', label: 'Panamanian Balboa' },
+  { code: 'CUP', symbol: '$MN',  flag: '🇨🇺', label: 'Cuban Peso' },
+  { code: 'DOP', symbol: 'RD$',  flag: '🇩🇴', label: 'Dominican Peso' },
+  { code: 'HTG', symbol: 'G',    flag: '🇭🇹', label: 'Haitian Gourde' },
+  { code: 'COP', symbol: 'COL$', flag: '🇨🇴', label: 'Colombian Peso' },
+  { code: 'VES', symbol: 'Bs.',  flag: '🇻🇪', label: 'Venezuelan Bolívar' },
+  { code: 'PEN', symbol: 'S/',   flag: '🇵🇪', label: 'Peruvian Sol' },
+  { code: 'BOB', symbol: 'Bs',   flag: '🇧🇴', label: 'Bolivian Boliviano' },
+  { code: 'BRL', symbol: 'R$',   flag: '🇧🇷', label: 'Brazilian Real' },
+  { code: 'CLP', symbol: 'CLP$', flag: '🇨🇱', label: 'Chilean Peso' },
+  { code: 'ARS', symbol: 'AR$',  flag: '🇦🇷', label: 'Argentine Peso' },
+  { code: 'PYG', symbol: '₲',    flag: '🇵🇾', label: 'Paraguayan Guaraní' },
+  { code: 'UYU', symbol: '$U',   flag: '🇺🇾', label: 'Uruguayan Peso' },
 ]
 
 export function CurrencySwitch({ className }: { className?: string }) {
@@ -63,7 +82,7 @@ export function CurrencySwitch({ className }: { className?: string }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1.5 w-52 overflow-hidden rounded-xl border border-border bg-card shadow-xl">
+        <div className="absolute right-0 top-full z-50 mt-1.5 max-h-80 w-56 overflow-y-auto overscroll-contain rounded-xl border border-border bg-card shadow-xl">
           {CURRENCIES.map((c) => (
             <button
               key={c.code}

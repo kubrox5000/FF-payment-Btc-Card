@@ -15,6 +15,7 @@ import {
   localeForCountry,
   formatLocalPrice,
   countryFromTimezone,
+  CURRENCIES,
   type Lang,
 } from '@/lib/currencies'
 import { t as translate, type TKey } from '@/lib/i18n'
@@ -104,9 +105,19 @@ export function GeoLocaleProvider({
     }
     if (override) setState((s) => ({ ...s, lang: override }))
 
+    // A manually chosen currency survives page reloads and beats geo-detection.
+    let currencyOverride: string | undefined
+    try {
+      const stored = globalThis.localStorage?.getItem('ff_locale_currency')
+      currencyOverride = stored && CURRENCIES[stored] ? stored : undefined
+    } catch {
+      currencyOverride = undefined
+    }
+    if (currencyOverride) setState((s) => ({ ...s, currency: currencyOverride }))
+
     const setLocale = (lang: Lang, currency: string, countryCode: string) => {
       if (cancelled) return
-      setState((s) => ({ ...s, lang: override ?? lang, currency, countryCode }))
+      setState((s) => ({ ...s, lang: override ?? lang, currency: currencyOverride ?? currency, countryCode }))
     }
 
     // Instant, network-free signal: the browser timezone (e.g. Africa/Casablanca → MA).
