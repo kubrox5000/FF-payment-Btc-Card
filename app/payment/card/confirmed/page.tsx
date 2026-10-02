@@ -14,7 +14,7 @@ import { useLocale } from '@/components/geo/GeoLocaleProvider'
 
 function ConfirmedContent() {
   const params      = useSearchParams()
-  const { formatPrice, currency } = useLocale()
+  const { t, formatPrice, currency } = useLocale()
   const orderNumber = params.get('order') ?? ''
   const packageId   = Number(params.get('packageId') ?? 0)
   const uid         = params.get('uid') ?? ''
@@ -51,10 +51,9 @@ function ConfirmedContent() {
           </div>
         </div>
 
-        <h1 className="text-3xl font-extrabold">تم استلام طلبك! 🎉</h1>
+        <h1 className="text-3xl font-extrabold">{t('conf_title')}</h1>
         <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-          تم تأكيد بياناتك بنجاح. سيقوم فريقنا بمراجعة الطلب<br />
-          وإضافة الماسات إلى حسابك في أقرب وقت.
+          {t('conf_sub_card')}
         </p>
       </div>
 
@@ -85,7 +84,7 @@ function ConfirmedContent() {
           {/* Details */}
           <div className="divide-y divide-border/50 px-5">
             <div className="flex items-center justify-between py-3">
-              <span className="text-sm text-muted-foreground">رقم الطلب</span>
+              <span className="text-sm text-muted-foreground">{t('conf_order_no')}</span>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-sm font-semibold">{orderNumber}</span>
                 <button
@@ -97,23 +96,23 @@ function ConfirmedContent() {
               </div>
             </div>
             <div className="flex items-center justify-between py-3">
-              <span className="text-sm text-muted-foreground">معرّف اللاعب (UID)</span>
+              <span className="text-sm text-muted-foreground">{t('conf_uid')}</span>
               <span className="font-mono text-sm font-semibold">{uid}</span>
             </div>
             {phone && (
               <div className="flex items-center justify-between py-3">
-                <span className="text-sm text-muted-foreground">رقم الهاتف</span>
+                <span className="text-sm text-muted-foreground">{t('conf_phone')}</span>
                 <span className="text-sm font-semibold" dir="ltr">{phone}</span>
               </div>
             )}
             <div className="flex items-center justify-between py-3">
-              <span className="text-sm text-muted-foreground">طريقة الدفع</span>
-              <span className="text-sm font-semibold">بطاقة بنكية</span>
+              <span className="text-sm text-muted-foreground">{t('pay_method_label')}</span>
+              <span className="text-sm font-semibold">{t('conf_bank_card')}</span>
             </div>
             <div className="flex items-center justify-between py-3">
-              <span className="text-sm text-muted-foreground">الحالة</span>
+              <span className="text-sm text-muted-foreground">{t('conf_status')}</span>
               <span className="flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-300">
-                <Clock className="h-3 w-3" /> قيد المراجعة
+                <Clock className="h-3 w-3" /> {t('conf_pending')}
               </span>
             </div>
           </div>
@@ -127,11 +126,11 @@ function ConfirmedContent() {
         }`}
       >
         <div className="rounded-2xl border border-border bg-card/50 p-5 space-y-4">
-          <p className="text-sm font-semibold text-muted-foreground">ماذا يحدث الآن؟</p>
+          <p className="text-sm font-semibold text-muted-foreground">{t('conf_next')}</p>
           {[
-            { icon: ShieldCheck, color: 'text-violet-400 bg-violet-500/10', text: 'فريقنا يراجع بيانات ويتحقق منها يدوياً' },
-            { icon: Phone,       color: 'text-sky-400 bg-sky-500/10',       text: `سيتواصل معك فريق الدعم عبر رقم هاتفك${phone ? ` (${phone})` : ''}` },
-            { icon: Gem,         color: 'text-emerald-400 bg-emerald-500/10', text: 'بعد التأكيد يتم إضافة الماسات لحسابك خلال دقائق' },
+            { icon: ShieldCheck, color: 'text-violet-400 bg-violet-500/10', text: t('conf_step_review') },
+            { icon: Phone,       color: 'text-sky-400 bg-sky-500/10',       text: t('conf_step_phone', { phone: phone ? ` (${phone})` : '' }) },
+            { icon: Gem,         color: 'text-emerald-400 bg-emerald-500/10', text: t('conf_step_add_min') },
           ].map(({ icon: Icon, color, text }, i) => (
             <div key={i} className="flex items-start gap-3">
               <span className={`mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg ${color}`}>
@@ -152,7 +151,7 @@ function ConfirmedContent() {
         <div className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200">
           <HeadphonesIcon className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
           <p>
-            إذا لم تستلم الماسات خلال <span className="font-bold">24 ساعة</span>، تواصل مع الدعم وأرسل رقم طلبك{' '}
+            {t('conf_support_pre')} <span className="font-bold">{t('conf_24h')}</span>{t('conf_support_post')}{' '}
             <span className="font-mono font-bold">{orderNumber}</span>.
           </p>
         </div>
@@ -169,13 +168,13 @@ function ConfirmedContent() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 px-4 py-3.5 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
         >
           <ArrowRight className="h-4 w-4" />
-          تتبع حالة طلبك
+          {t('conf_track')}
         </Link>
         <Link
           href="/"
           className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary"
         >
-          العودة للرئيسية
+          {t('conf_home')}
         </Link>
       </div>
     </div>

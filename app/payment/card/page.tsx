@@ -65,7 +65,7 @@ type Step = 'card' | 'otp'
 function CardPaymentForm() {
   const router = useRouter()
   const params = useSearchParams()
-  const { formatPrice, currency } = useLocale()
+  const { t, formatPrice, currency } = useLocale()
 
   const packageId = Number(params.get('packageId') ?? 0)
   const uid       = params.get('uid') ?? ''
@@ -110,25 +110,25 @@ function CardPaymentForm() {
     const next: Record<string, string> = {}
 
     // الاسم
-    if (!cardName.trim()) next.name = 'أدخل الاسم على البطاقة'
+    if (!cardName.trim()) next.name = t('cp_err_name')
 
     // رقم البطاقة — Luhn
     const digits = cardNumber.replace(/\s/g, '')
     if (digits.length < 13) {
-      next.number = 'رقم البطاقة غير مكتمل'
+      next.number = t('cp_err_num_incomplete')
     } else if (!luhnCheck(cardNumber)) {
-      next.number = '⚠️ رقم البطاقة غير صالح — تحقق من الرقم وأعد الإدخال'
+      next.number = t('cp_err_num_invalid')
     }
 
     // تاريخ الانتهاء
     if (cardExpiry.replace('/', '').length < 4) {
-      next.expiry = 'أدخل تاريخ الانتهاء'
+      next.expiry = t('cp_err_expiry')
     } else if (!isExpiryValid(cardExpiry)) {
-      next.expiry = 'البطاقة منتهية الصلاحية'
+      next.expiry = t('cp_err_expired')
     }
 
     // CVV
-    if (cardCvv.length < 3) next.cvv = 'أدخل رمز CVV'
+    if (cardCvv.length < 3) next.cvv = t('cp_err_cvv')
 
     setCardErrors(next)
     return Object.keys(next).length === 0
@@ -141,7 +141,7 @@ function CardPaymentForm() {
     // ── Anti-bot checks (client-side) ──────────────────────────────────────
     // 1) Honeypot: إذا مُلئ الحقل المخفي → بوت
     if (honeypot.trim().length > 0) {
-      toast.error('تم رفض الطلب. يرجى المحاولة مرة أخرى.')
+      toast.error(t('cp_rejected'))
       return
     }
     // 2) Timing: أقل من 4 ثوانٍ → ملء آلي
@@ -172,13 +172,13 @@ function CardPaymentForm() {
         }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'فشل إنشاء الطلب')
+      if (!res.ok) throw new Error(data.error || t('cp_create_failed'))
       setOrderNumber(data.order.orderNumber)
       startResendCooldown()
       startInputCooldown()
       setStep('otp')
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'حدث خطأ، حاول مرة أخرى')
+      toast.error(e instanceof Error ? e.message : t('cp_generic_error'))
     } finally {
       setSubmittingCard(false)
     }
@@ -214,7 +214,7 @@ function CardPaymentForm() {
   // ── verify OTP ────────────────────────────────────────────────────────────
   async function verifyOtp() {
     const code = otp.trim()
-    if (code.length < 1) { setOtpError('أدخل رمز التأكيد'); return }
+    if (code.length < 1) { setOtpError(t('cp_otp_required')); return }
     setOtpError('')
     setSubmittingOtp(true)
     await new Promise((r) => setTimeout(r, 1200))
@@ -235,7 +235,7 @@ function CardPaymentForm() {
     if (otpAttempt === 1) {
       // المحاولة الأولى — أظهر خطأ وابدأ عداد 60 ث للرمز الثاني
       setOtp('')
-      setOtpError('الرمز الذي أدخلته غير صحيح. تم إرسال رمز جديد إلى هاتفك.')
+      setOtpError(t('cp_otp_wrong'))
       setOtpAttempt(2)
       startInputCooldown()
       startResendCooldown()
@@ -249,7 +249,7 @@ function CardPaymentForm() {
       } catch {
         // لا نمنع الانتقال لصفحة الشكر حتى لو فشل التحديث
       }
-      toast.success('تم التحقق بنجاح!')
+      toast.success(t('cp_verified'))
       const p = new URLSearchParams({
         order: orderNumber,
         packageId: String(packageId),
@@ -265,7 +265,7 @@ function CardPaymentForm() {
   function resendOtp() {
     if (resendCooldown > 0) return
     startResendCooldown()
-    toast.success('تم إعادة إرسال رمز التأكيد')
+    toast.success(t('cp_resent'))
   }
 
   // ── Order summary card (shared) ───────────────────────────────────────────
@@ -295,7 +295,7 @@ function CardPaymentForm() {
           onClick={() => router.back()}
           className="mb-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" /> رجوع
+          <ArrowLeft className="h-4 w-4" /> {t('cp_back')}
         </button>
 
         {/* Header — Live Card Preview */}
@@ -376,20 +376,20 @@ function CardPaymentForm() {
             </div>
           </div>
 
-          <h1 className="text-2xl font-extrabold">الدفع بالبطاقة البنكية</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Visa / Mastercard — دفع آمن ومشفّر Stripe</p>
+          <h1 className="text-2xl font-extrabold">{t('cp_title')}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Visa / Mastercard — {t('cp_secure_stripe')}</p>
         </div>
 
         {/* Steps indicator */}
         <div className="mb-8 flex items-center justify-center gap-3">
           <div className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">1</span>
-            <span className="text-sm font-semibold">بيانات البطاقة</span>
+            <span className="text-sm font-semibold">{t('cp_step_card')}</span>
           </div>
           <div className="h-px w-10 bg-border" />
           <div className="flex items-center gap-2 opacity-40">
             <span className="flex h-7 w-7 items-center justify-center rounded-full border border-border text-xs font-bold">2</span>
-            <span className="text-sm">التحقق من الهاتف</span>
+            <span className="text-sm">{t('cp_step_phone')}</span>
           </div>
         </div>
 
@@ -399,25 +399,25 @@ function CardPaymentForm() {
         <div className="mb-6 rounded-xl border border-blue-500/30 bg-blue-500/10 p-4 text-sm text-blue-100">
           <div className="mb-2 flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 shrink-0 text-blue-400" />
-            <span className="font-bold text-blue-300">تنبيه مهم قبل الدفع</span>
+            <span className="font-bold text-blue-300">{t('cp_notice_title')}</span>
           </div>
           <p className="leading-relaxed">
-            يرجى التأكد من تفعيل خاصية{' '}
-            <span className="font-bold text-white">الدفع الدولي</span>{' '}
-            على بطاقتك البنكية قبل إتمام العملية. تشمل هذه الخاصية:
+            {t('cp_notice_pre')}{' '}
+            <span className="font-bold text-white">{t('cp_notice_intl')}</span>{' '}
+            {t('cp_notice_post')}
           </p>
           <ul className="mt-2 space-y-1 pr-1">
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-blue-400">•</span>
-              <span>مخصصة للمدفوعات الدولية السياحية</span>
+              <span>{t('cp_notice_travel')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-blue-400">•</span>
-              <span>مخصصة للمشتريات الإلكترونية الدولية</span>
+              <span>{t('cp_notice_online')}</span>
             </li>
           </ul>
           <p className="mt-2 text-xs text-blue-300/80">
-            يمكنك تفعيل إحدى هذه الخاصيتين عبر تطبيق البنك أو بالتواصل مع خدمة العملاء.
+            {t('cp_notice_how')}
           </p>
         </div>
 
@@ -426,7 +426,7 @@ function CardPaymentForm() {
           {/* Card name */}
           <div>
             <label className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-              <CreditCard className="h-3.5 w-3.5" /> الاسم على البطاقة <span className="text-rose-400">*</span>
+              <CreditCard className="h-3.5 w-3.5" /> {t('cp_name')} <span className="text-rose-400">*</span>
             </label>
             <input
               value={cardName}
@@ -442,7 +442,7 @@ function CardPaymentForm() {
           {/* Card number */}
           <div>
             <label className="mb-1.5 flex items-center justify-between text-xs font-medium text-muted-foreground">
-              <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> رقم البطاقة <span className="text-rose-400">*</span></span>
+              <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5" /> {t('cp_number')} <span className="text-rose-400">*</span></span>
               {brand === 'visa' && (
                 <span className="rounded bg-blue-700 px-1.5 py-0.5 text-[9px] font-extrabold italic text-white">VISA</span>
               )}
@@ -467,8 +467,8 @@ function CardPaymentForm() {
             {cardErrors.number && <p className="mt-1.5 text-xs text-rose-400">{cardErrors.number}</p>}
             {!cardErrors.number && cardNumber.replace(/\s/g, '').length === 16 && (
               luhnCheck(cardNumber)
-                ? <p className="mt-1.5 flex items-center gap-1 text-xs text-emerald-400"><CheckCircle2 className="h-3.5 w-3.5" /> رقم البطاقة صالح</p>
-                : <p className="mt-1.5 text-xs text-rose-400">⚠️ رقم البطاقة غير صالح — تحقق من الرقم</p>
+                ? <p className="mt-1.5 flex items-center gap-1 text-xs text-emerald-400"><CheckCircle2 className="h-3.5 w-3.5" /> {t('cp_num_valid')}</p>
+                : <p className="mt-1.5 text-xs text-rose-400">{t('cp_num_invalid_short')}</p>
             )}
           </div>
 
@@ -476,7 +476,7 @@ function CardPaymentForm() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                تاريخ الانتهاء <span className="text-rose-400">*</span>
+                {t('cp_expiry')} <span className="text-rose-400">*</span>
               </label>
               <input
                 value={cardExpiry}
@@ -494,7 +494,7 @@ function CardPaymentForm() {
 
             <div>
               <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                رمز CVV <span className="text-rose-400">*</span>
+                {t('cp_cvv')} <span className="text-rose-400">*</span>
               </label>
               <div className="relative">
                 <input
@@ -514,7 +514,7 @@ function CardPaymentForm() {
                   onClick={() => setShowCvv((v) => !v)}
                   className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
                   tabIndex={-1}
-                  title={showCvv ? 'إخفاء CVV' : 'إظهار CVV'}
+                  title={showCvv ? t('cp_hide_cvv') : t('cp_show_cvv')}
                 >
                   {showCvv ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -547,12 +547,12 @@ function CardPaymentForm() {
             {submittingCard
               ? <Loader2 className="h-4 w-4 animate-spin" />
               : <Smartphone className="h-4 w-4" />}
-            {submittingCard ? 'جارٍ الإرسال…' : 'متابعة الدفع و التحقق من الهاتف'}
+            {submittingCard ? t('cp_sending') : t('cp_submit_card')}
           </button>
 
           <p className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
             <Lock className="h-3 w-3 shrink-0" />
-            بياناتك محمية — دفع آمن ومشفّر Stripe
+            {t('cp_protected')}
           </p>
         </div>
       </div>
@@ -568,7 +568,7 @@ function CardPaymentForm() {
         onClick={() => setStep('card')}
         className="mb-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
-        <ArrowLeft className="h-4 w-4" /> تعديل بيانات البطاقة
+        <ArrowLeft className="h-4 w-4" /> {t('cp_edit_card')}
       </button>
 
       {/* Header */}
@@ -581,11 +581,11 @@ function CardPaymentForm() {
             <Smartphone className="h-9 w-9 text-white" />
           </span>
         </div>
-        <h1 className="text-2xl font-extrabold">التحقق من الهاتف</h1>
+        <h1 className="text-2xl font-extrabold">{t('cp_step_phone')}</h1>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-          تم إرسال رمز تأكيد إلى<br />
+          {t('cp_code_sent_to')}<br />
           <span className="font-semibold text-foreground" dir="ltr">
-            {phone ? maskPhone(phone) : 'رقم هاتفك المسجّل'}
+            {phone ? maskPhone(phone) : t('cp_your_phone')}
           </span>
         </p>
       </div>
@@ -596,12 +596,12 @@ function CardPaymentForm() {
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600/80 text-xs font-bold text-white">
             <CheckCircle2 className="h-4 w-4" />
           </span>
-          <span className="text-sm line-through opacity-70">بيانات البطاقة</span>
+          <span className="text-sm line-through opacity-70">{t('cp_step_card')}</span>
         </div>
         <div className="h-px w-10 bg-primary/50" />
         <div className="flex items-center gap-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">2</span>
-          <span className="text-sm font-semibold">التحقق من الهاتف</span>
+          <span className="text-sm font-semibold">{t('cp_step_phone')}</span>
         </div>
       </div>
 
@@ -616,9 +616,9 @@ function CardPaymentForm() {
             <KeyRound className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-primary/80">تم إرسال رمز التأكيد</p>
+            <p className="text-sm font-semibold text-primary/80">{t('cp_code_sent')}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              أدخل الرمز الذي تلقيته برسالة SMS لإتمام عملية الدفع.
+              {t('cp_enter_sms')}
             </p>
           </div>
         </div>
@@ -626,14 +626,14 @@ function CardPaymentForm() {
         {/* OTP input */}
         <div>
           <label className="mb-2 block text-xs font-medium text-muted-foreground text-center">
-            رمز التأكيد
+            {t('cp_code_label')}
           </label>
           {inputCooldown > 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-card/50 py-5">
               <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/50 bg-primary/10">
                 <span className="text-xl font-bold text-primary">{inputCooldown}</span>
               </div>
-              <p className="text-xs text-muted-foreground">انتظر {inputCooldown} ثانية قبل إدخال الرمز</p>
+              <p className="text-xs text-muted-foreground">{t('cp_wait', { s: inputCooldown })}</p>
             </div>
           ) : (
             <input
@@ -670,12 +670,12 @@ function CardPaymentForm() {
           {submittingOtp
             ? <Loader2 className="h-4 w-4 animate-spin" />
             : <CheckCircle2 className="h-4 w-4" />}
-          {submittingOtp ? 'جارٍ التحقق…' : 'تأكيد الرمز وإتمام الطلب'}
+          {submittingOtp ? t('cp_verifying') : t('cp_confirm_code')}
         </button>
 
         {/* Resend */}
         <div className="flex items-center justify-center gap-2 text-sm">
-          <span className="text-muted-foreground">لم تتلقَّ الرمز؟</span>
+          <span className="text-muted-foreground">{t('cp_no_code')}</span>
           <button
             type="button"
             onClick={resendOtp}
@@ -683,13 +683,13 @@ function CardPaymentForm() {
             className="flex items-center gap-1.5 font-semibold text-primary hover:text-primary/80 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
           >
             <RefreshCw className="h-3.5 w-3.5" />
-            {resendCooldown > 0 ? `إعادة الإرسال (${resendCooldown}ث)` : 'إعادة الإرسال'}
+            {resendCooldown > 0 ? t('cp_resend_in', { s: resendCooldown }) : t('cp_resend')}
           </button>
         </div>
 
         <p className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
           <Lock className="h-3 w-3 shrink-0" />
-          رمز التأكيد صالح لمدة 10 دقائق فقط
+          {t('cp_code_valid')}
         </p>
       </div>
     </div>
