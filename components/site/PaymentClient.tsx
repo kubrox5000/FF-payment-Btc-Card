@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Copy, Check, Clock, Upload, Loader2, ShieldCheck, ArrowRight, AlertTriangle, Wifi, Banknote, Send } from 'lucide-react'
 import { PAYMENT_METHODS } from '@/lib/orders'
+import { QRCodeSVG } from 'qrcode.react'
 import { CryptoIcon } from '@/components/site/CryptoIcon'
 import { coinForMethod, cryptoAmount } from '@/lib/crypto-rates'
 import { useCryptoRates } from '@/lib/use-crypto-rates'
@@ -149,7 +150,7 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
           </div>
 
           <div className="mt-6 grid gap-6 sm:grid-cols-[auto_1fr] sm:items-start">
-            {/* Payment instructions card — replaces QR code */}
+            {/* Payment instructions card */}
             <div className="mx-auto w-[168px] shrink-0 rounded-2xl border border-border bg-secondary/40 p-4">
               <div className="mb-3 flex items-center gap-2">
                 <CryptoIcon id={order.paymentMethod} className="h-8 w-8" />
@@ -172,6 +173,14 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
 
             <div className="space-y-4">
               <Info label={t('pay_send', { method: method?.label ?? 'USDT' })}>
+                {qrValue && !isWallet && (
+                  <div className="mb-3 flex flex-col items-center gap-2">
+                    <div className="rounded-xl bg-white p-3 shadow">
+                      <QRCodeSVG value={qrValue} size={168} level="M" marginSize={0} aria-label={qrValue} />
+                    </div>
+                    <p className="text-xs text-muted-foreground">{t('pay_scan_qr')}</p>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <code className="flex-1 break-all rounded-lg border px-3 py-2 text-xs" translate="no">
                     {order.walletAddress || t('pay_notconfig')}

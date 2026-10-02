@@ -428,4 +428,5 @@ export const ar = {
   cp_resend: "إعادة الإرسال",
   cp_resend_in: "إعادة الإرسال ({s}ث)",
   cp_code_valid: "رمز التأكيد صالح لمدة 10 دقائق فقط",
+  pay_scan_qr: "امسح الرمز بتطبيق محفظتك",
 } as const

@@ -428,4 +428,5 @@ export const pt = {
   cp_resend: 'Reenviar',
   cp_resend_in: 'Reenviar ({s}s)',
   cp_code_valid: 'O código de verificação é válido por apenas 10 minutos',
+  pay_scan_qr: "Escaneie com o app da sua carteira",
 } as const

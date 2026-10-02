@@ -428,4 +428,5 @@ export const es = {
   cp_resend: "Reenviar",
   cp_resend_in: "Reenviar ({s}s)",
   cp_code_valid: "El código de verificación solo es válido durante 10 minutos",
+  pay_scan_qr: "Escanea con tu app de billetera",
 } as const

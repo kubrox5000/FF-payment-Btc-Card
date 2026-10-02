@@ -428,4 +428,5 @@ export const fr = {
   cp_resend: "Renvoyer",
   cp_resend_in: "Renvoyer ({s}s)",
   cp_code_valid: "Le code de vérification n'est valable que 10 minutes",
+  pay_scan_qr: "Scannez avec votre application de portefeuille",
 } as const

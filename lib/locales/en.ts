@@ -428,6 +428,7 @@ export const en = {
   cp_resend: "Resend",
   cp_resend_in: "Resend ({s}s)",
   cp_code_valid: "The verification code is valid for 10 minutes only",
+  pay_scan_qr: "Scan with your wallet app",
 } as const
 
 export type EnDict = { [K in keyof typeof en]: string }
