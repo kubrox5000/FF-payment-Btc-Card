@@ -119,7 +119,7 @@ export const fr = {
   sum_sub: 'Sélectionnez un pack pour voir le récapitulatif.',
   pay_group_card: 'Carte bancaire',
   pay_group_card_sub: 'Paiement sécurisé Visa / Mastercard',
-  pay_group_crypto: 'Cryptomonnaie',
+  pay_group_crypto: 'Stablecoins',
   pay_group_crypto_sub: 'Et les stablecoins ETH, BTC et USDT',
   pay_group_wallet: 'Portefeuilles',
   pay_group_wallet_sub: 'Et plus Binance Pay, Wise, Skrill',
