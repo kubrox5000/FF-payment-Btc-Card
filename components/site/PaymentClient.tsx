@@ -111,7 +111,7 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
       const res = await fetch(`/api/orders/${order.orderNumber}/proof`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ txId, proofUrl: proof }),
+        body: JSON.stringify({ txId, proofUrl: proof, cryptoAmount: coinTotal ? `${coinTotal.amount} ${coinTotal.symbol}` : null }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || t('err_failed'))
