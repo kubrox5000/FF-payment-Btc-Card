@@ -192,9 +192,6 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
                   <CryptoIcon id={order.paymentMethod} className="h-8 w-8" />
                   <code className="flex-1 text-base font-bold text-gold" translate="no">
                     {waitingRate ? <Loader2 className="inline h-4 w-4 animate-spin" /> : `${exactAmount} ${exactSymbol}`}
-                    {exactSymbol !== 'USDT' && (
-                      <span className="block text-xs font-medium text-muted-foreground">≈ {usdtAmount} USDT</span>
-                    )}
                   </code>
                   <button
                     onClick={() => copy(exactAmount, 'amt')}

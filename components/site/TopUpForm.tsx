@@ -498,7 +498,9 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                         {coinTotal ? `${coinTotal.amount} ${coinTotal.symbol}` : <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                       </p>
                     )}
-                    <p className="text-xs text-muted-foreground" translate="no">{price.usdt.toFixed(2)} USDT</p>
+                    {(!coin || coin.symbol === 'USDT') && (
+                      <p className="text-xs text-muted-foreground" translate="no">{price.usdt.toFixed(2)} USDT</p>
+                    )}
                   </div>
                 </div>
               </div>
