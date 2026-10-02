@@ -28,7 +28,7 @@ export default async function TopUpPage() {
   if (process.env.DATABASE_URL) {
     try {
       const [dbPkgs, dbMethods] = await Promise.all([
-        db.select().from(packages).where(eq(packages.active, true)).orderBy(asc(packages.sortOrder)),
+        db.select().from(packages).where(eq(packages.active, true)).orderBy(asc(packages.diamonds), asc(packages.id)),
         db.select().from(paymentMethods).where(eq(paymentMethods.active, true)).orderBy(asc(paymentMethods.sortOrder)),
       ])
       pkgRows = dbPkgs as unknown as PublicPackage[]
