@@ -6,6 +6,8 @@ import { toast } from 'sonner'
 import { Copy, Check, Clock, Upload, Loader2, ShieldCheck, ArrowRight, AlertTriangle, Wifi, Banknote, Send } from 'lucide-react'
 import { PAYMENT_METHODS } from '@/lib/orders'
 import { CryptoIcon } from '@/components/site/CryptoIcon'
+import { coinForMethod, cryptoAmount } from '@/lib/crypto-rates'
+import { useCryptoRates } from '@/lib/use-crypto-rates'
 import { useLocale } from '@/components/geo/GeoLocaleProvider'
 import type { PublicOrder } from '@/lib/types'
 
@@ -35,6 +37,15 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
 
   const method = methods.find((m) => m.id === order.paymentMethod)
   const isWallet = method?.cat === 'wallet'
+
+  // Exact amount to send in the selected coin (falls back to USDT).
+  const coin = coinForMethod(order.paymentMethod)
+  const rates = useCryptoRates(!!coin && !coin.stable)
+  const usdtAmount = parseFloat(order.amountUsdt).toFixed(2)
+  const coinTotal = cryptoAmount(parseFloat(order.amountUsdt), order.paymentMethod, rates)
+  const exactAmount = coinTotal?.amount ?? usdtAmount
+  const exactSymbol = coinTotal?.symbol ?? 'USDT'
+  const waitingRate = !!coin && !coin.stable && !coinTotal
   const [remaining, setRemaining] = useState(0)
   useEffect(() => {
     const deadline = new Date(order.createdAt).getTime() + 30 * 60 * 1000
@@ -180,10 +191,14 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
                 <div className="flex items-center gap-2">
                   <CryptoIcon id={order.paymentMethod} className="h-8 w-8" />
                   <code className="flex-1 text-base font-bold text-gold" translate="no">
-                    {parseFloat(order.amountUsdt).toFixed(2)} USDT
+                    {waitingRate ? <Loader2 className="inline h-4 w-4 animate-spin" /> : `${exactAmount} ${exactSymbol}`}
+                    {exactSymbol !== 'USDT' && (
+                      <span className="block text-xs font-medium text-muted-foreground">≈ {usdtAmount} USDT</span>
+                    )}
                   </code>
                   <button
-                    onClick={() => copy(parseFloat(order.amountUsdt).toFixed(2), 'amt')}
+                    onClick={() => copy(exactAmount, 'amt')}
+                    disabled={waitingRate}
                     className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-border hover:bg-secondary"
                     aria-label={t('pay_track')}
                   >

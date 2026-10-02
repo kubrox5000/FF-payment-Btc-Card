@@ -13,6 +13,8 @@ import { orderedCountries, DIAL_CODES, DIAL_OPTIONS, countryByCode } from '@/lib
 import { formatNumber } from '@/lib/currencies'
 import { useLocale } from '@/components/geo/GeoLocaleProvider'
 import { CryptoIcon } from '@/components/site/CryptoIcon'
+import { coinForMethod, cryptoAmount } from '@/lib/crypto-rates'
+import { useCryptoRates } from '@/lib/use-crypto-rates'
 import { cn } from '@/utils/cn'
 import type { PublicPackage, PublicPaymentMethod } from '@/lib/types'
 
@@ -109,6 +111,11 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
     }
     return { usd, usdt }
   }, [selected, couponPct])
+
+  // Total in the coin the customer picked (e.g. BTC), using live prices.
+  const coin = coinForMethod(method)
+  const rates = useCryptoRates(!!coin && !coin.stable)
+  const coinTotal = cryptoAmount(price.usdt, method, rates)
 
   async function applyCoupon() {
     if (!coupon.trim()) return
@@ -485,6 +492,12 @@ export function TopUpForm({ packages, paymentMethods, freeGift, cardPaymentEnabl
                   <span className="font-semibold">{t('total')}</span>
                   <div className="text-right">
                     <p className="text-xl font-extrabold text-gold" translate="no">{formatPrice(price.usd)}</p>
+                    {coin && coin.symbol !== 'USDT' && (
+                      <p className="flex items-center justify-end gap-1.5 text-sm font-bold text-foreground" translate="no">
+                        <CryptoIcon id={method} className="h-4 w-4" />
+                        {coinTotal ? `${coinTotal.amount} ${coinTotal.symbol}` : <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground" translate="no">{price.usdt.toFixed(2)} USDT</p>
                   </div>
                 </div>
